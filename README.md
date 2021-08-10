@@ -12,7 +12,8 @@ participate.
 
 ## Olympic Medals. Year: 2021, Week: 31. <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Olympic_rings_with_transparent_rims.svg" alt="some text" width=60 height=40>
 
-### About this dataset (source: [kaggle](https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results))
+**About this dataset (source:
+[kaggle](https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results))**
 
 This is a historical dataset on the modern Olympic Games, including all
 the Games from Athens 1896 to Rio 2016. I scraped this data from
@@ -27,4 +28,4 @@ Winter in 1998, and so on. A common mistake people make when analyzing
 this data is to assume that the Summer and Winter Games have always been
 staggered.
 
-### My Tidytuesday outputs
+**My Tidytuesday outputs**
