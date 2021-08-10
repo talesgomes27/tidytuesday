@@ -29,3 +29,5 @@ this data is to assume that the Summer and Winter Games have always been
 staggered.
 
 **My Tidytuesday outputs**
+
+![tidytuesday\_2021-31](2021-31/fig/tidytuesday_2021-07-27.png)

@@ -9,6 +9,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   echo = FALSE,
   message = FALSE,
+  fig.align = "center",
   error = FALSE,
   comment = "#>"
 )
@@ -33,6 +34,10 @@ Note that the Winter and Summer Games were held in the same year up until 1992. 
 
 
 **My Tidytuesday outputs**
+
+
+![tidytuesday_2021-31](2021-31/fig/tidytuesday_2021-07-27.png)
+
 
 
 

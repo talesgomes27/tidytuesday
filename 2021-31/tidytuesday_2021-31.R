@@ -52,7 +52,6 @@ sex_per_sport |>
   dplyr::mutate(sex = stringr::str_remove(sex, "percent_"),
                 sex = forcats::fct_relevel(sex, c("M", "F"))) |>
   ggplot(mapping = aes(percent, sport)) +  
-  #ggplot(mapping = aes(percent, fct_reorder2(sport, sex, percent, .desc = TRUE))) +
   geom_col(aes(fill = sex, color = sex), position = "stack") +
   scale_color_manual(values=c("#229954", "#D4AC0D"), labs(""))+
   scale_fill_manual(values=c("#229954", "#D4AC0D"), labs(""))+
@@ -66,7 +65,6 @@ sex_per_sport |>
     panel.grid.minor  = element_blank(),
     axis.title = element_text(color = "gray81", size = 20),
     axis.text = element_text(color = "gray81"),
-    #axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
     plot.caption = element_text(color = "gray81", size = 20),
     plot.title = element_text(color = "white", hjust = 0.5, size = 22, family = "sans")
   )+
@@ -79,7 +77,7 @@ sex_per_sport |>
 
  #Exportando a imagem gerada. 
  
- ggsave("tidytuesday_2021-07-27.png",
+ ggsave("2021-31/fig/tidytuesday_2021-07-27.png",
         scale = 1,
         dpi = 600,
         width = 45,
@@ -99,37 +97,3 @@ medal_per_sex <- olympics_country |>
   ungroup()
 
 
-
-
-# Gerando o gráfico Modalidade Esportiva Vs Participação de Gênero
-medal_per_sex |> 
-  ggplot(mapping = aes(year, n)) +
-  geom_col(aes(fill = medal, color = medal), position = "stack") +
-  scale_color_manual(values=c("#A77044", "#C0C0C0", "#FFD700"), labs(""))+
-  scale_fill_manual(values=c("#A77044", "#C0C0C0", "#FFD700"), labs(""))+
-  hrbrthemes::theme_ft_rc(axis_text_size = 20)+
-  # theme(
-  #   legend.title = element_blank(),
-  #   legend.text = element_text(color = "gray81", size = 20),
-  #   panel.grid.major = element_blank(),
-  #   panel.grid.minor  = element_blank(),
-  #   axis.title = element_text(color = "gray81", size = 20),
-  #   axis.text = element_text(color = "gray81"),
-  #   #axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
-  #   plot.caption = element_text(color = "gray81", size = 20),
-  #   plot.title = element_text(color = "white", hjust = 0.5, size = 22, family = "sans")
-  # )+
-  labs(
-    y = "",
-    x = "",
-    title = "Male to Famale Athletes Proportion Across All Summer Olympics in Brazil by Sports",
-    caption = "@talesgomes2709 | #tidytuesday | source: kaggle | [github](https://github.com/talesgomes27)"
-  )
-
-#Exportando a imagem gerada. 
-# ggsave("tidytuesday_2021-07-27.png",
-#        scale = 1,
-#        dpi = 600,
-#        width = 40,
-#        height = 30,
-#        units = c("cm"))
