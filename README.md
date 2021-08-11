@@ -30,4 +30,4 @@ staggered.
 
 **My Tidytuesday outputs**
 
-![tidytuesday\_2021-31](2021-31/fig/tidytuesday_2021-07-27.png)
+![tidytuesday\_2021-31](tidytuesday/2021-31/fig/tidytuesday_2021-07-27.png)
