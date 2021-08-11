@@ -79,13 +79,13 @@ sex_per_sport |>
   hrbrthemes::theme_ipsum_pub(axis_text_size = 20)+
   theme(
     legend.title = element_blank(),
-    legend.text = element_text(color = "black", size = 20),
+    legend.text = element_text(color = "darkgray", size = 20),
     panel.grid.major = element_blank(),
     panel.grid.minor  = element_blank(),
-    axis.title = element_text(color = "black", size = 20),
-    axis.text = element_text(color = "black"),
-    plot.caption = element_text(color = "black", size = 20),
-    plot.title = element_text(color = "black", hjust = 0.5, size = 22, family = "sans")
+    axis.title = element_text(color = "darkgray", size = 20),
+    axis.text = element_text(color = "darkgray"),
+    plot.caption = element_text(color = "darkgray", size = 20),
+    plot.title = element_text(color = "darkgray", hjust = 0.5, size = 22, family = "sans")
   )+
   labs(
     y = "",
