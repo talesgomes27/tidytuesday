@@ -15,14 +15,23 @@ library(tidyverse)
 
 tuesdata <- tidytuesdayR::tt_load(2021, week = 31)
 
-olympics <- tuesdata$olympics
-regions <- tuesdata$regions
+olympics <- left_join(tuesdata$regions, tuesdata$olympics, by= c("NOC" = "noc"))
+
+olympics <- olympics |> 
+  mutate(
+    medal = replace_na(medal, "None"),
+    sex = factor(sex, levels = c("F", "M")),
+    medal = ordered(medal, levels = c("None", "Bronze", "Silver", "Gold")),
+    season = factor(season, levels = c("Summer", "Winter")),
+    year = factor(year, ordered = TRUE),
+    id = factor(id)
+  )
 
 
-Country <- "Brazil"
 
+Country <- "BRA"
 olympics_country <- olympics |> 
-  filter(team == Country)
+  filter(NOC == Country)
 
 
 
@@ -74,9 +83,7 @@ sex_per_sport |>
     title = "Male to Famale Athletes Proportion Across All Summer Olympics in Brazil by Sports",
     caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
   )
-
- #Exportando a imagem gerada. 
- 
+# Exportando a imagem gerada.
  ggsave("2021-31/fig/tidytuesday_2021-07-27.png",
         scale = 1,
         dpi = 600,
@@ -87,13 +94,36 @@ sex_per_sport |>
 
 #### Medal per Sex #####
 
-
 #Filtrando os dados
 medal_per_sex <- olympics_country |>
-  filter(season == "Summer") |>
-  drop_na() |> 
-  group_by(year, medal) |> 
-  summarise(medal_n = n()) |> 
-  ungroup()
+   filter(season == "Summer" & medal != "None") |>
+   group_by(year, medal, sex, sport, event) |>
+   summarise(medal_n = if_else(n()>=1,1,0), .groups = "drop") |> 
+   ungroup()
 
+ 
 
+medal_per_sex |> 
+ggplot(mapping = aes(year, medal_n)) +  
+  geom_col(aes(fill = medal, color = sex), position = "stack") +
+  scale_color_manual(values=c("#229954", "#D4AC0D"), labs(""))+
+  scale_fill_manual(values=c("#8B4513", "#C0C0C0", "#FFD700"), labs(""))+
+  geom_vline(xintercept = 50, color = "gray81", linetype = "dashed", size = 0.7)+
+  #scale_x_continuous(labels = scales::unit_format(unit = "%"))+
+  hrbrthemes::theme_ft_rc(axis_text_size = 20)+
+  theme(
+    legend.title = element_blank(),
+    legend.text = element_text(color = "gray81", size = 20),
+    panel.grid.major = element_blank(),
+    panel.grid.minor  = element_blank(),
+    axis.title = element_text(color = "gray81", size = 20),
+    axis.text = element_text(color = "gray81"),
+    plot.caption = element_text(color = "gray81", size = 20),
+    plot.title = element_text(color = "white", hjust = 0.5, size = 22, family = "sans")
+  )+
+  labs(
+    y = "",
+    x = "",
+    title = "Male to Famale Athletes Proportion Across All Summer Olympics in Brazil by Sports",
+    caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
+  )
