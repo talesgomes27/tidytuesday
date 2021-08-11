@@ -15,8 +15,16 @@ library(tidyverse)
 
 tuesdata <- tidytuesdayR::tt_load(2021, week = 31)
 
+
+str(tuesdata)
+head(tuesdata)
+
+#Mesclando as bases para dar utilidade a coluna "region" da tabela "regions"
 olympics <- left_join(tuesdata$regions, tuesdata$olympics, by= c("NOC" = "noc"))
 
+
+#limpando a base de algumas colunas que não serao utilizadas,
+#bem como transformando outras em fatores para melhor manipulação
 olympics <- olympics |> 
   mutate(
     medal = replace_na(medal, "None"),
@@ -24,19 +32,18 @@ olympics <- olympics |>
     medal = ordered(medal, levels = c("None", "Bronze", "Silver", "Gold")),
     season = factor(season, levels = c("Summer", "Winter")),
     year = factor(year, ordered = TRUE),
-    id = factor(id)
-  )
+    id = factor(id),
+    NOC = factor(NOC)
+  ) |> 
+  select(-c(notes,age, height, weight, team))
+  
 
 
 
 Country <- "BRA"
 olympics_country <- olympics |> 
-  filter(NOC == Country)
+  filter(NOC == Country & year >= 1948)
 
-
-
-
-#### Sport Vs Sex ####
 
 #Filtrando os dados
 sex_per_sport <- olympics_country |>
@@ -62,25 +69,28 @@ sex_per_sport |>
                 sex = forcats::fct_relevel(sex, c("M", "F"))) |>
   ggplot(mapping = aes(percent, sport)) +  
   geom_col(aes(fill = sex, color = sex), position = "stack") +
-  scale_color_manual(values=c("#229954", "#D4AC0D"), labs(""))+
-  scale_fill_manual(values=c("#229954", "#D4AC0D"), labs(""))+
+  hrbrthemes::scale_color_ft()+
+  hrbrthemes::scale_fill_ft()+
+  #scale_color_manual(values=c("#229954", "#D4AC0D"), labs(""))+
+  #scale_fill_manual(values=c("#229954", "#D4AC0D"), labs(""))+
   geom_vline(xintercept = 50, color = "gray81", linetype = "dashed", size = 0.7)+
-  scale_x_continuous(labels = scales::unit_format(unit = "%"))+
-  hrbrthemes::theme_ft_rc(axis_text_size = 20)+
+  #scale_x_continuous(labels = scales::unit_format(unit = "%"))+
+  hrbrthemes::scale_x_percent(scale = 1)+
+  hrbrthemes::theme_ipsum_pub(axis_text_size = 20)+
   theme(
     legend.title = element_blank(),
-    legend.text = element_text(color = "gray81", size = 20),
+    legend.text = element_text(color = "black", size = 20),
     panel.grid.major = element_blank(),
     panel.grid.minor  = element_blank(),
-    axis.title = element_text(color = "gray81", size = 20),
-    axis.text = element_text(color = "gray81"),
-    plot.caption = element_text(color = "gray81", size = 20),
-    plot.title = element_text(color = "white", hjust = 0.5, size = 22, family = "sans")
+    axis.title = element_text(color = "black", size = 20),
+    axis.text = element_text(color = "black"),
+    plot.caption = element_text(color = "black", size = 20),
+    plot.title = element_text(color = "black", hjust = 0.5, size = 22, family = "sans")
   )+
   labs(
     y = "",
     x = "",
-    title = "Male to Famale Athletes Proportion Across All Summer Olympics in Brazil by Sports",
+    title = "Summer Olympics male to famale athletes proportion from 1948 to 2016 in Brazil by sports",
     caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
   )
 # Exportando a imagem gerada.
