@@ -84,7 +84,7 @@ sex_per_sport |>
     caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
   )
 # Exportando a imagem gerada.
- ggsave("2021-31/fig/tidytuesday_2021-07-27.png",
+ ggsave("tidytuesday/2021-31/fig/tidytuesday_2021-07-27.png",
         scale = 1,
         dpi = 600,
         width = 45,
@@ -109,7 +109,6 @@ ggplot(mapping = aes(year, medal_n)) +
   scale_color_manual(values=c("#229954", "#D4AC0D"), labs(""))+
   scale_fill_manual(values=c("#8B4513", "#C0C0C0", "#FFD700"), labs(""))+
   geom_vline(xintercept = 50, color = "gray81", linetype = "dashed", size = 0.7)+
-  #scale_x_continuous(labels = scales::unit_format(unit = "%"))+
   hrbrthemes::theme_ft_rc(axis_text_size = 20)+
   theme(
     legend.title = element_blank(),

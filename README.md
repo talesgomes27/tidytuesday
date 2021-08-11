@@ -10,7 +10,7 @@ The goal of this project is to keep a personal archive of all the
 [tidytuesdays](https://github.com/rfordatascience/tidytuesday) I
 participate.
 
-## Olympic Medals. Year: 2021, Week: 31. <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Olympic_rings_with_transparent_rims.svg" alt="some text" width=60 height=40>
+## Olympic Medals. Year: 2021, Week: 31. <img src="fig/Olympic_rings.svg" alt="some text" width=60 height=40>
 
 **About this dataset (source:
 [kaggle](https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results))**
