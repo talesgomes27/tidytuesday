@@ -34,3 +34,4 @@ staggered.
 ![tidytuesday\_2021-31](tidytuesday/2021-31/fig/Canada_tidytuesday_2021-07-27.png)
 ![tidytuesday\_2021-31](tidytuesday/2021-31/fig/China_tidytuesday_2021-07-27.png)
 ![tidytuesday\_2021-31](tidytuesday/2021-31/fig/USA_tidytuesday_2021-07-27.png)
+![tidytuesday\_2021-31](tidytuesday/2021-31/fig/Comp_tidytuesday_2021-07-27.png)

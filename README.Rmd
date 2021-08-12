@@ -40,7 +40,7 @@ Note that the Winter and Summer Games were held in the same year up until 1992. 
 ![tidytuesday_2021-31](tidytuesday/2021-31/fig/Canada_tidytuesday_2021-07-27.png)
 ![tidytuesday_2021-31](tidytuesday/2021-31/fig/China_tidytuesday_2021-07-27.png)
 ![tidytuesday_2021-31](tidytuesday/2021-31/fig/USA_tidytuesday_2021-07-27.png)
-
+![tidytuesday_2021-31](tidytuesday/2021-31/fig/Comp_tidytuesday_2021-07-27.png)
 
 
 

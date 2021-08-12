@@ -41,6 +41,8 @@ olympics <- olympics |>
 countrys <- c("CAN", "CHN", "USA", "BRA")
 country_colors <- cbind(c("#FFFFFF", "#FF0000"), c("#FFDE00", "#DE2910"), c("#3C3B6E", "#B22234"), c("#FFDF00", "#009C3B"))
 colnames(country_colors) <- countrys
+myplots <- list()
+
 
 for(i in 1:4){
   
@@ -58,9 +60,7 @@ sex_per_sport <- olympics_country |>
   group_by(sport) |>
   mutate(percent = 100 *n/sum(n)) |>
   filter(percent < 100) |>
-  ungroup()
-
- sex_per_sport |>
+  ungroup() |> 
   dplyr::select(-n) |>
   tidyr::pivot_wider(names_from = sex,
                      values_from = percent,
@@ -70,7 +70,9 @@ sex_per_sport <- olympics_country |>
                       values_to = "percent") |>
   dplyr::rename("sex" = name) |>
   dplyr::mutate(sex = stringr::str_remove(sex, "percent_"),
-                sex = forcats::fct_relevel(sex, c("M", "F"))) |>
+                sex = forcats::fct_relevel(sex, c("M", "F")))
+
+fig <- sex_per_sport |> 
   ggplot(mapping = aes(percent, sport)) +  
   geom_col(aes(fill = sex, color = sex), position = "stack") +
   #hrbrthemes::scale_color_ft()+
@@ -96,20 +98,34 @@ sex_per_sport <- olympics_country |>
   labs(
     y = "",
     x = "",
-    title = country_title,
-    subtitle = "Summary by sports",
-    caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
+    #title = country_title,
+    #subtitle = "Summary by sports",
+    #caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
   )
 
-fig_name <- str_c("tidytuesday/2021-31/fig/", olympics_country$region[1], "_tidytuesday_2021-07-27.png")
-ggsave(fig_name,
-        scale = 1,
-        dpi = 600,
-        width = 45,
-        height = 35,
-        units = c("cm"))
-
+# fig_name <- str_c("tidytuesday/2021-31/fig/", olympics_country$region[1], "_tidytuesday_2021-07-27.png")
+# ggsave(fig_name,
+#         scale = 1,
+#         dpi = 600,
+#         width = 45,
+#         height = 35,
+#         units = c("cm"))
+myplots[[i]] <- fig
 }
+
+ggpubr::ggarrange(myplots[[1]], myplots[[2]], myplots[[3]], myplots[[4]],
+                 labels = countrys,
+                 ncol = 2, nrow = 2)
+
+
+
+ggsave("tidytuesday/2021-31/fig/Comp_tidytuesday_2021-07-27.png",
+       scale = 1,
+       dpi = 600,
+       width = 45,
+       height = 35,
+       units = c("cm"))
+
 #### Medal per Sex #####
 
 #Filtrando os dados
