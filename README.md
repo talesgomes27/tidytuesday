@@ -30,4 +30,7 @@ staggered.
 
 **My Tidytuesday outputs**
 
-![tidytuesday\_2021-31](tidytuesday/2021-31/fig/tidytuesday_2021-07-27.png)
+![tidytuesday\_2021-31](tidytuesday/2021-31/fig/Brazil_tidytuesday_2021-07-27.png)
+![tidytuesday\_2021-31](tidytuesday/2021-31/fig/Canada_tidytuesday_2021-07-27.png)
+![tidytuesday\_2021-31](tidytuesday/2021-31/fig/China_tidytuesday_2021-07-27.png)
+![tidytuesday\_2021-31](tidytuesday/2021-31/fig/USA_tidytuesday_2021-07-27.png)

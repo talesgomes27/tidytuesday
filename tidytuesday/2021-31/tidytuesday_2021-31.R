@@ -38,12 +38,17 @@ olympics <- olympics |>
   select(-c(notes,age, height, weight, team))
   
 
+countrys <- c("CAN", "CHN", "USA", "BRA")
+country_colors <- cbind(c("#FFFFFF", "#FF0000"), c("#FFDE00", "#DE2910"), c("#3C3B6E", "#B22234"), c("#FFDF00", "#009C3B"))
+colnames(country_colors) <- countrys
 
-
-Country <- "BRA"
+for(i in 1:4){
+  
+#Country <- "BRA"
 olympics_country <- olympics |> 
-  filter(NOC == Country & year >= 1948)
+  filter(NOC == countrys[i] & year >= 1964)
 
+country_title <-  str_c("Summer Olympics male to famale athletes proportion from 1964 to 2016 in", olympics_country$region[1], sep = " ") 
 
 #Filtrando os dados
 sex_per_sport <- olympics_country |>
@@ -55,8 +60,7 @@ sex_per_sport <- olympics_country |>
   filter(percent < 100) |>
   ungroup()
 
-
-sex_per_sport |>
+ sex_per_sport |>
   dplyr::select(-n) |>
   tidyr::pivot_wider(names_from = sex,
                      values_from = percent,
@@ -69,11 +73,12 @@ sex_per_sport |>
                 sex = forcats::fct_relevel(sex, c("M", "F"))) |>
   ggplot(mapping = aes(percent, sport)) +  
   geom_col(aes(fill = sex, color = sex), position = "stack") +
-  hrbrthemes::scale_color_ft()+
-  hrbrthemes::scale_fill_ft()+
-  #scale_color_manual(values=c("#229954", "#D4AC0D"), labs(""))+
-  #scale_fill_manual(values=c("#229954", "#D4AC0D"), labs(""))+
-  geom_vline(xintercept = 50, color = "gray81", linetype = "dashed", size = 0.7)+
+  #hrbrthemes::scale_color_ft()+
+  #hrbrthemes::scale_fill_ft()+
+  scale_color_manual(values=country_colors[,i], labs(""))+
+  scale_fill_manual(values=country_colors[,i], labs(""))+
+  #geom_vline(xintercept = 50, color = "darkgray", linetype = "dashed", size = 0.7)+
+  geom_vline(xintercept = 50, linetype = "dashed", size = 0.7)+
   #scale_x_continuous(labels = scales::unit_format(unit = "%"))+
   hrbrthemes::scale_x_percent(scale = 1)+
   hrbrthemes::theme_ipsum_pub(axis_text_size = 20)+
@@ -91,19 +96,20 @@ sex_per_sport |>
   labs(
     y = "",
     x = "",
-    title = "Summer Olympics male to famale athletes proportion from 1948 to 2016 in Brazil",
+    title = country_title,
     subtitle = "Summary by sports",
     caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
   )
-# Exportando a imagem gerada.
- ggsave("tidytuesday/2021-31/fig/tidytuesday_2021-07-27.png",
+
+fig_name <- str_c("tidytuesday/2021-31/fig/", olympics_country$region[1], "_tidytuesday_2021-07-27.png")
+ggsave(fig_name,
         scale = 1,
         dpi = 600,
         width = 45,
         height = 35,
         units = c("cm"))
 
-
+}
 #### Medal per Sex #####
 
 #Filtrando os dados
