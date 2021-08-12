@@ -85,12 +85,14 @@ sex_per_sport |>
     axis.title = element_text(color = "darkgray", size = 20),
     axis.text = element_text(color = "darkgray"),
     plot.caption = element_text(color = "darkgray", size = 20),
-    plot.title = element_text(color = "darkgray", hjust = 0.5, size = 22, family = "sans")
+    plot.title = element_text(color = "darkgray", hjust = 0.5, size = 22, family = "sans"),
+    plot.subtitle = element_text(color = "darkgray", size = 20, family = "sans")
   )+
   labs(
     y = "",
     x = "",
-    title = "Summer Olympics male to famale athletes proportion from 1948 to 2016 in Brazil by sports",
+    title = "Summer Olympics male to famale athletes proportion from 1948 to 2016 in Brazil",
+    subtitle = "Summary by sports",
     caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
   )
 # Exportando a imagem gerada.
