@@ -114,7 +114,7 @@ myplots[[i]] <- fig
 }
 
 ggpubr::ggarrange(myplots[[1]], myplots[[2]], myplots[[3]], myplots[[4]],
-                 labels = countrys,
+                 labels = c("Canada", "China", "USA", "Brazil"),
                  ncol = 2, nrow = 2,
                  font.label = list(size = 14, color = "darkgray", face = "bold"))
 
