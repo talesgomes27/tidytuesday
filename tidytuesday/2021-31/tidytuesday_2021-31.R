@@ -40,12 +40,16 @@ olympics <- olympics |>
 
 
 ####Filtrando agregado por esportes e gênero####
+
+#Variaveis auxiliares#
+#Paises na análise
 countrys <- c("CAN", "CHN", "USA", "BRA")
-country_colors <- cbind(c("#FFFFFF", "#FF0000"), c("#FFDE00", "#DE2910"), c("#3C3B6E", "#B22234"), c("#FFDF00", "#009C3B"))
+#Cores das bandeiras dos paises
+country_colors <- cbind(c("#FFFFFF", "#FF0000"), c("#FFDE00", "#DE2910"),
+                        c("#3C3B6E", "#B22234"), c("#FFDF00", "#009C3B"))
 colnames(country_colors) <- countrys
+#Lista que armazenará as Imagens geradas
 myplots <- list()
-
-
 
 #Gerando imagens esportes vs gênero
 for(i in 1:4){
@@ -54,7 +58,8 @@ for(i in 1:4){
   olympics_country <- olympics |> 
     filter(NOC == countrys[i] & year >= 1964)
   
-  country_title <-  str_c("Summer Olympics male to famale athletes proportion from 1964 to 2016 in", olympics_country$region[1], sep = " ") 
+  country_title <-  str_c("Summer Olympics male to famale athletes proportion from 1964 to 2016 in",
+                          olympics_country$region[1], sep = " ") 
   
   #Filtrando os dados
   sex_per_sport <- olympics_country |>
@@ -92,8 +97,10 @@ for(i in 1:4){
       axis.title = element_text(color = "darkgray", size = 20),
       axis.text = element_text(color = "darkgray"),
       plot.caption = element_text(color = "darkgray", size = 20),
-      plot.title = element_text(color = "darkgray", hjust = 0.5, size = 22, family = "sans"),
-      plot.subtitle = element_text(color = "darkgray", size = 20, family = "sans")
+      plot.title = element_text(color = "darkgray", hjust = 0.5,
+                                size = 22, family = "sans"),
+      plot.subtitle = element_text(color = "darkgray",
+                                   size = 20, family = "sans")
     )+
     labs(
       y = "",
@@ -103,7 +110,8 @@ for(i in 1:4){
       caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
     )
   
-  fig_name <- str_c("tidytuesday/2021-31/fig/", olympics_country$region[1], "_tidytuesday_2021-07-27.png")
+  fig_name <- str_c("tidytuesday/2021-31/fig/",
+                    olympics_country$region[1], "_tidytuesday_2021-07-27.png")
   ggsave(fig_name,
          scale = 1,
          dpi = 600,
@@ -128,8 +136,10 @@ for(i in 1:4){
       axis.title = element_text(color = "darkgray", size = 20),
       axis.text = element_text(color = "darkgray"),
       plot.caption = element_text(color = "darkgray", size = 20),
-      plot.title = element_text(color = "darkgray", hjust = 0.5, size = 22, family = "sans"),
-      plot.subtitle = element_text(color = "darkgray", size = 20, family = "sans")
+      plot.title = element_text(color = "darkgray", hjust = 0.5,
+                                size = 22, family = "sans"),
+      plot.subtitle = element_text(color = "darkgray",
+                                   size = 20, family = "sans")
     )+
     labs(
       y = "",
@@ -146,7 +156,8 @@ for(i in 1:4){
 ggpubr::ggarrange(myplots[[1]], myplots[[2]], myplots[[3]], myplots[[4]],
                   labels = c("Canada", "China", "USA", "Brazil"),
                   ncol = 2, nrow = 2,
-                  font.label = list(size = 14, color = "darkgray", face = "bold"))
+                  font.label = list(size = 14,
+                                    color = "darkgray", face = "bold"))
 
 
 
@@ -175,7 +186,8 @@ medal_per_sex |>
   geom_col(aes(fill = medal, color = sex), position = "stack") +
   scale_color_manual(values=c("#229954", "#D4AC0D"), labs(""))+
   scale_fill_manual(values=c("#8B4513", "#C0C0C0", "#FFD700"), labs(""))+
-  geom_vline(xintercept = 50, color = "gray81", linetype = "dashed", size = 0.7)+
+  geom_vline(xintercept = 50, color = "gray81",
+             linetype = "dashed", size = 0.7)+
   hrbrthemes::theme_ft_rc(axis_text_size = 20)+
   theme(
     legend.title = element_blank(),
@@ -185,7 +197,8 @@ medal_per_sex |>
     axis.title = element_text(color = "gray81", size = 20),
     axis.text = element_text(color = "gray81"),
     plot.caption = element_text(color = "gray81", size = 20),
-    plot.title = element_text(color = "white", hjust = 0.5, size = 22, family = "sans")
+    plot.title = element_text(color = "white", hjust = 0.5,
+                              size = 22, family = "sans")
   )+
   labs(
     y = "",
