@@ -14,8 +14,8 @@
 library(tidyverse)
 
 
-# tuesdata <- tidytuesdayR::tt_load(2021, week = 31)
-tuesdata <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-07-27/olympics.csv')
+tuesdata <- tidytuesdayR::tt_load(2021, week = 31)
+#tuesdata <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-07-27/olympics.csv')
 
 
 
@@ -68,6 +68,29 @@ for (i in 1:4) {
     )
   
   
+  #Filtrando os dados
+  sex_per_sport <- olympics_country |>
+    filter(season == "Summer") |>
+    group_by(sport) |>
+    count(sex) |>
+    group_by(sport) |>
+    mutate(percent = 100 * n / sum(n)) |>
+    filter(percent < 100) |>
+    ungroup() |>
+    dplyr::select(-n) |>
+    tidyr::pivot_wider(
+      names_from = sex,
+      values_from = percent,
+      names_prefix = "percent_"
+    ) |>
+    dplyr::mutate(sport = forcats::fct_reorder(sport, desc(percent_F))) |>
+    tidyr::pivot_longer(cols = c("percent_F", "percent_M"),
+                        values_to = "percent") |>
+    dplyr::rename("sex" = name) |>
+    dplyr::mutate(
+      sex = stringr::str_remove(sex, "percent_"),
+      sex = forcats::fct_relevel(sex, c("M", "F"))
+    ) 
   
   #Gerando Lista de figuras para
   fig <- sex_per_sport |>
@@ -96,30 +119,6 @@ for (i in 1:4) {
          x = "", )
   myplots[[i]] <- fig
   
-  
-  #Filtrando os dados
-  sex_per_sport <- olympics_country |>
-    filter(season == "Summer") |>
-    group_by(sport) |>
-    count(sex) |>
-    group_by(sport) |>
-    mutate(percent = 100 * n / sum(n)) |>
-    filter(percent < 100) |>
-    ungroup() |>
-    dplyr::select(-n) |>
-    tidyr::pivot_wider(
-      names_from = sex,
-      values_from = percent,
-      names_prefix = "percent_"
-    ) |>
-    dplyr::mutate(sport = forcats::fct_reorder(sport, desc(percent_F))) |>
-    tidyr::pivot_longer(cols = c("percent_F", "percent_M"),
-                        values_to = "percent") |>
-    dplyr::rename("sex" = name) |>
-    dplyr::mutate(
-      sex = stringr::str_remove(sex, "percent_"),
-      sex = forcats::fct_relevel(sex, c("M", "F"))
-    )
   # 
   # sex_per_sport |>
   #   ggplot(mapping = aes(percent, sport)) +
@@ -167,7 +166,7 @@ for (i in 1:4) {
   # ggsave(
   #   fig_name,
   #   scale = 1,
-  #   dpi = 600,
+  #   dpi = 400,
   #   width = 45,
   #   height = 35,
   #   units = c("cm")
@@ -207,7 +206,7 @@ ggpubr::annotate_figure(
 ggsave(
   "tidytuesday/2021-31/fig/Comp_tidytuesday_2021-07-27.png",
   scale = 1,
-  dpi = 600,
+  dpi = 400,
   width = 90,
   height = 50,
   units = c("cm")
@@ -303,7 +302,7 @@ for (i in 1:4) {
   # ggsave(
   #   fig_name,
   #   scale = 1,
-  #   dpi = 600,
+  #   dpi = 400,
   #   width = 45,
   #   height = 35,
   #   units = c("cm")
@@ -343,7 +342,7 @@ ggpubr::annotate_figure(
 ggsave(
   "tidytuesday/2021-31/fig/Comp_participation_per_sex.png",
   scale = 1,
-  dpi = 600,
+  dpi = 400,
   width = 90,
   height = 50,
   units = c("cm")
@@ -441,7 +440,7 @@ for (i in 1:4) {
   # ggsave(
   #   fig_name,
   #   scale = 1,
-  #   dpi = 600,
+  #   dpi = 400,
   #   width = 45,
   #   height = 35,
   #   units = c("cm")
@@ -482,7 +481,7 @@ ggpubr::annotate_figure(
 ggsave(
   "tidytuesday/2021-31/fig/Comp_medals_per_sex.png",
   scale = 1,
-  dpi = 600,
+  dpi = 400,
   width = 90,
   height = 50,
   units = c("cm")
