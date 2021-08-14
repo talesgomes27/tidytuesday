@@ -214,6 +214,111 @@ ggsave(
 
 
 
+#### Filtrando por esportes e número de medalhas ####
+for (i in 1:4) {
+  olympics_country <- olympics |>
+    filter(NOC == countrys[i] & year >= 1948)
+  country_title <- str_c(
+    "Summer Olympics male to famale medal proportion from 1964 to 2016 in",
+    olympics_country$region[1],
+    sep = " "
+  )
+  
+  
+  medal_per_sport_sex <- olympics_country |>
+    filter(season == "Summer" & medal != "None") |>
+    group_by(sport, sex, medal, event) |>
+    count(medal) |>
+    group_by(sport) |>
+    mutate(percent = 100 * n / sum(n)) |>
+    ungroup() |>
+    dplyr::select(-n) |>
+    tidyr::pivot_wider(
+      names_from = sex,
+      values_from = percent,
+      names_prefix = "percent_"
+    ) |>
+    dplyr::mutate(sport = forcats::fct_reorder(sport, desc(percent_F))) |>
+    tidyr::pivot_longer(cols = c("percent_F", "percent_M"),
+                        values_to = "percent") |>
+    dplyr::rename("sex" = name) |>
+    dplyr::mutate(
+      sex = stringr::str_remove(sex, "percent_"),
+      sex = forcats::fct_relevel(sex, c("M", "F"))
+    ) |>
+    drop_na()
+  
+  
+  fig <- medal_per_sport_sex |>
+    ggplot(mapping = aes(percent, sport)) +
+    geom_col(aes(fill = sex, color = sex), position = "stack") +
+    scale_color_manual(values = country_colors[, i], labs("")) +
+    scale_fill_manual(values = country_colors[, i], labs("")) +
+    geom_vline(xintercept = 50,
+               linetype = "dashed",
+               size = 0.7) +
+    hrbrthemes::scale_x_percent(scale = 1) +
+    hrbrthemes::theme_ipsum_pub(axis_text_size = 20) +
+    theme(
+      legend.title = element_blank(),
+      legend.text = element_text(color = "darkgray", size = 20),
+      panel.grid.major = element_blank(),
+      panel.grid.minor  = element_blank(),
+      axis.text = element_text(color = "darkgray"),
+      plot.subtitle = element_text(
+        color = "darkgray",
+        size = 20,
+        family = "sans"
+      )
+    ) +
+    labs(y = "",
+         x = "",)
+  
+  myplots[[i]] <- fig
+  
+  
+}
+
+
+#Gerando imagem unificada
+comp_plot <- ggpubr::ggarrange(
+  myplots[[1]],
+  myplots[[2]],
+  myplots[[3]],
+  myplots[[4]],
+  labels = c("Canada", "China", "USA", "Brazil"),
+  ncol = 2,
+  nrow = 2,
+  font.label = list(size = 14,
+                    color = "darkgray", face = "bold")
+)
+
+ggpubr::annotate_figure(
+  comp_plot,
+  top = ggpubr::text_grob(
+    "Summer olympics male to famale medals proportion from 1948 to 2016",
+    color = "darkgray",
+    face = "bold",
+    size = 20
+  ),
+  bottom = ggpubr::text_grob(
+    "@talesgomes2709 | #tidytuesday | source: kaggle",
+    color = "darkgray",
+    face = "bold",
+    size = 18
+  )
+)
+
+#Salvando iagens unificadas
+ggsave(
+  "tidytuesday/2021-31/fig/Comp_medal_oer gender_and_sports.png",
+  scale = 1,
+  dpi = 400,
+  width = 90,
+  height = 50,
+  units = c("cm")
+)
+
 
 ####Filtrando participação por gênero####
 
