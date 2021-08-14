@@ -12,7 +12,6 @@ knitr::opts_chunk$set(
   fig.align = "center",
   error = FALSE,
   comment = "#>"
-  
 )
 ```
 
