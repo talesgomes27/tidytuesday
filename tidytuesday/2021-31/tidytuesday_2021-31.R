@@ -13,6 +13,7 @@
 library(tidyverse)
 
 
+
 tuesdata <- tidytuesdayR::tt_load(2021, week = 31)
 
 
