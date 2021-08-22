@@ -1,0 +1,527 @@
+---
+title: "A study on femele participation in Brazil"
+author: "Tales Gomes"
+date: "22/08/2021"
+output: 
+  html_document:
+    theme: flatly  
+    self-contained: true
+    code_folding: hide
+    toc: true
+    toc_float: true
+    includes:
+      in_header:
+        - hero-image.html
+    css:
+      - style.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      cache = FALSE,
+                      warning = FALSE,
+                      message = FALSE,
+                      error = FALSE)
+```
+
+
+```{r, include=FALSE}
+
+#Inspiração
+#https://twitter.com/SaintZainn/status/1420348744147509249
+
+
+# Get the Data
+
+# Read in with tidytuesdayR package 
+# Install from CRAN via: install.packages("tidytuesdayR")
+# This loads the readme and all the datasets for the week of interest
+
+# Either ISO-8601 date or year/week works!
+
+library(raster)
+library(grid)
+library(gtable)
+library(tidyverse)
+
+tuesdata <- tidytuesdayR::tt_load(2021, week = 31)
+#tuesdata <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-07-27/olympics.csv')
+
+               
+```
+
+
+
+## Resumo
+
+::: {.fullwidth}
+Este trabalho foi feito com base nos dados históricos olímpicos modernos (fonte:[kaggle](https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results)), tendo como objetivo realizar uma comparação do brasil com a média olimpica e os maiores medalistas americanos (Estados unidos e Canadá) em relação à participação feminina de 1948 até 2016. Para isso foram feitos agrupamentos por esporte praticado, ano da olímpiada, bem como por número de medalha por gênero. Canadá e Estados Unidos foram escolhidos para comparação por estarem no continente americano, possuírem tamanhos similares ao do Brasil, além do fato de terem participado de todas as edições olímpicas no período estudado. 
+:::
+
+
+
+## Tidytuesday
+
+::: {.fullwidth}
+Este trabalho foi feito a partir do [tidytuesday](https://github.com/rfordatascience/tidytuesday) do ano de 2021, semana 31.  No decorrer dessa seção será mostrado o código utilizado nessa análise e o projeto completo pode ser encontrados no repositório [github](https://github.com/talesgomes27/tidytuesday). 
+:::
+
+### Limpeza de dados
+
+```{r Limpeza de Dados}
+
+
+
+#Mesclando as bases para dar utilidade a coluna "region" da tabela "regions"
+olympics <- left_join(tuesdata$regions, tuesdata$olympics, by = c("NOC" = "noc"))
+
+####Limpando os Dados####
+#limpando a base de algumas colunas que não serao utilizadas,
+#bem como transformando outras em fatores para melhor manipulação
+olympics <- olympics |>
+  mutate(
+    medal = replace_na(medal, "None"),
+    sex = factor(sex, levels = c("F", "M")),
+    medal = ordered(medal, levels = c("None", "Bronze", "Silver", "Gold")),
+    season = factor(season, levels = c("Summer", "Winter")),
+    year = factor(year, ordered = TRUE),
+    id = factor(id),
+    NOC = factor(NOC)
+  ) |>
+  select(-c(notes, age, height, weight, team))
+
+
+
+
+
+```
+
+#### Variáveis auxiliáres
+
+```{r Variaveis auxiliares}
+
+####Variaveis auxiliares####
+#Paises na análise
+countrys <- c("CAN", "USA", "BRA")
+#Cores das bandeiras dos paises
+country_colors <- cbind(
+  c("#FFFAFA", "#FF0000"),
+  c("#3C3B6E", "#B22234"),
+  c("#FFDF00", "#009C3B")
+)
+olympic_color <- c("#35B2C9", "#FFBF00")
+colnames(country_colors) <- countrys
+
+#Lista que armazenará as Imagens geradas
+list_fig_sex_sport <- list()
+list_fig_sex_year <- list()
+list_fig_medal_sport <- list()
+
+# Figuras auxiliares
+Olympic_rings <- png::readPNG("fig/Olympic_rings.png") |> 
+  rasterGrob(interpolate = TRUE)
+flag_canada <- png::readPNG("fig/canada.png")  |> 
+  rasterGrob(interpolate = TRUE)
+flag_usa <- png::readPNG("fig/usa.png") |> 
+  rasterGrob(interpolate = TRUE)
+flag_brazil <- png::readPNG("fig/brazil.png") |> 
+  rasterGrob(interpolate = TRUE)
+
+
+flags <- list(flag_canada, flag_usa, flag_brazil)
+
+
+```
+
+
+### Análise geral
+
+#### Olímpiada por ano
+
+```{r Analise Geral por ano}
+
+sex_per_year <- olympics |>
+  filter(season == "Summer" & year >= 1948) |>
+  group_by(year) |>
+  count(sex) |>
+  group_by(year) |>
+  mutate(percent = 100 * n / sum(n)) |>
+  filter(percent < 100) |>
+  ungroup() |>
+  dplyr::select(-n) |>
+  tidyr::pivot_wider(
+    names_from = sex,
+    values_from = percent,
+    names_prefix = "percent_"
+  ) |>
+  dplyr::mutate(year = forcats::fct_reorder(year, desc(percent_F))) |>
+  tidyr::pivot_longer(cols = c("percent_F", "percent_M"),
+                      values_to = "percent") |>
+  dplyr::rename("sex" = name) |>
+  dplyr::mutate(
+    sex = stringr::str_remove(sex, "percent_"),
+    sex = forcats::fct_relevel(sex, c("M", "F"))
+  ) 
+
+
+
+fig_olympic_year <- sex_per_year |>
+  ggplot(mapping = aes(percent, year)) +
+  geom_col(aes(fill = sex, color = sex), position = "stack") +
+  scale_color_manual(values = olympic_color, labs("")) +
+  scale_fill_manual(values = olympic_color, labs("")) +
+  geom_vline(xintercept = 50,
+             linetype = "dashed",
+             size = 0.7) +
+  hrbrthemes::scale_x_percent(scale = 1) +
+  hrbrthemes::theme_ipsum_pub() +
+  theme(
+    legend.title = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor  = element_blank(),
+    legend.text = element_text(size = 20),
+    axis.text.x = element_text(size = 20),
+    axis.text.y = element_text(size = 20),
+    plot.caption = element_text(size = 20),
+    plot.subtitle = element_text(size = 20, vjust = -1)
+  ) +
+  labs(
+    y = "",
+    x = "",
+    subtitle = "Participation by gender and year",
+    caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
+  ) +
+  ggtitle("")
+
+fig_olympic_year <- ggplotGrob(fig_olympic_year)
+  
+new_title <- gtable(unit(c(0.8, 6.9, 0.8), "in"), unit(0.8, "in")) |>
+  gtable_add_grob(grobs = Olympic_rings, t = 1, l = 1) |>
+  gtable_add_grob(textGrob(label = "Total olympic participation from 1948 to 2017",
+                           x = unit(0, "npc"), just = "left", gp=gpar(fontsize=25)),
+                  t = 1, l = 2) |>
+  gtable_add_grob(grobs = Olympic_rings, t = 1, l = 3) |>
+  gtable_add_col_space(width = unit(5, "pt"))
+
+fig_olympic_year$grobs[[which(fig_olympic_year$layout$name == "title")]] <- new_title
+
+```
+
+
+#### Olímpiada por esporte
+
+```{r Anailse Geral  por esportes}
+
+
+#Filtrando os dados por ano olímpico
+sex_per_sport <- olympics |>
+  filter(season == "Summer" & year >= 1948) |>
+  group_by(sport) |>
+  count(sex) |>
+  group_by(sport) |>
+  mutate(percent = 100 * n / sum(n)) |>
+  #filter(percent < 100) |>
+  ungroup() |>
+  dplyr::select(-n) |>
+  tidyr::pivot_wider(
+    names_from = sex,
+    values_from = percent,
+    names_prefix = "percent_"
+  ) |>
+  dplyr::mutate(sport = forcats::fct_reorder(sport, desc(percent_F))) |>
+  tidyr::pivot_longer(cols = c("percent_F", "percent_M"),
+                      values_to = "percent") |>
+  dplyr::rename("sex" = name) |>
+  dplyr::mutate(
+    sex = stringr::str_remove(sex, "percent_"),
+    sex = forcats::fct_relevel(sex, c("M", "F")),
+    percent = replace_na(percent, 0)
+  ) 
+
+
+
+
+#participação por olímpiada e gênero
+fig_olympic_sport <- sex_per_sport |>
+  ggplot(mapping = aes(percent, sport)) +
+  geom_col(aes(fill = sex, color = sex), position = "stack") +
+  scale_color_manual(values = olympic_color, labs("")) +
+  scale_fill_manual(values = olympic_color, labs("")) +
+  geom_vline(xintercept = 50,
+             linetype = "dashed",
+             size = 0.7) +
+  hrbrthemes::scale_x_percent(scale = 1) +
+  hrbrthemes::theme_ipsum_pub() +
+  theme(
+    legend.title = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor  = element_blank(),
+    legend.text = element_text(size = 24),
+    axis.text.x = element_text(size = 24),
+    axis.text.y = element_text(size = 24),
+    plot.caption = element_text(size = 28),
+    plot.subtitle = element_text(size = 28, vjust = -1)
+  ) +
+  labs(
+    y = "",
+    x = "",
+    subtitle = "Participation by gender and sport",
+    caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
+  ) +
+  ggtitle("")
+
+
+fig_olympic_sport <- ggplotGrob(fig_olympic_sport)
+  
+new_title <- gtable(unit(c(0.9, 9.3, 0.9), "in"), unit(0.9, "in")) |>
+  gtable_add_grob(grobs = Olympic_rings, t = 1, l = 1) |>
+  gtable_add_grob(textGrob(label = "Total olympic participation from 1948 to 2017",
+                           x = unit(0, "npc"), just = "left", gp=gpar(fontsize=34)),
+                  t = 1, l = 2) |>
+  gtable_add_grob(grobs = Olympic_rings, t = 1, l = 3) |>
+  gtable_add_col_space(width = unit(5, "pt"))
+
+fig_olympic_sport$grobs[[which(fig_olympic_sport$layout$name == "title")]] <- new_title
+
+```
+
+#### Olímpiada por medalha
+
+```{r Analise Geral por medalhas}
+
+
+#Filtrando por Medalhas e esporte
+medal_per_sex_sport <- olympics |>
+  filter(season == "Summer" & medal != "None" & year >= 1948) |>
+  with_groups(c(sport, sex, event), count, sex) |> 
+  with_groups(sport, mutate, percent = 100 * n / sum(n)) |> 
+  select(-n) |>
+  pivot_wider(
+    names_from = sex,
+    values_from = percent,
+    names_prefix = "percent_"
+    ) |>
+  mutate(percent_M = replace_na(percent_M, 0),
+         percent_F = replace_na(percent_F, 0)) |> 
+  select(-event) |> 
+  with_groups(sport, summarise, sport,
+              percent_F = sum(percent_F),
+              percent_M = sum(percent_M)) |> 
+  unique() |> 
+  pivot_longer(cols = c("percent_F", "percent_M"),
+               values_to = "percent") |>
+  rename("sex" = name) |>
+  mutate(
+    sex = str_remove(sex, "percent_"),
+    sex = fct_relevel(sex, c("M", "F"))
+    )
+
+
+
+fig_olympic_medal_sport <- medal_per_sex_sport |>
+  ggplot() +
+  geom_col(mapping = aes(percent,
+                         fct_reorder2(sport, sex, percent, .desc = TRUE),
+                         fill = sex, color = sex), position = "stack") +
+  scale_color_manual(values = olympic_color, labs("")) +
+  scale_fill_manual(values = olympic_color, labs("")) +
+  geom_vline(xintercept = 50,
+             linetype = "dashed",
+             size = 0.7) +
+  hrbrthemes::scale_x_percent(scale = 1) +
+  hrbrthemes::theme_ipsum_pub() +
+  theme(
+    legend.title = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor  = element_blank(),
+    panel.grid  = element_blank(),
+    legend.text = element_text(size = 24),
+    axis.text.x = element_text(size = 24),
+    axis.text.y = element_text(size = 24),
+    plot.caption = element_text(size = 28),
+    plot.subtitle = element_text(size = 28, vjust = -1)
+  ) +
+  labs(
+    y = "",
+    x = "",
+    subtitle = "Quantity of medal per gender and sport",
+    caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
+  ) +
+  ggtitle("")
+
+     
+fig_olympic_medal_sport <- ggplotGrob(fig_olympic_medal_sport)
+  
+new_title <- gtable(unit(c(0.9, 9.3, 0.9), "in"), unit(0.9, "in")) |>
+  gtable_add_grob(grobs = Olympic_rings, t = 1, l = 1) |>
+  gtable_add_grob(textGrob(label = "Total olympic participation from 1948 to 2017",
+                           x = unit(0, "npc"), just = "left", gp=gpar(fontsize=34)),
+                  t = 1, l = 2) |>
+  gtable_add_grob(grobs = Olympic_rings, t = 1, l = 3) |>
+  gtable_add_col_space(width = unit(5, "pt"))
+
+fig_olympic_medal_sport$grobs[[which(fig_olympic_medal_sport$layout$name == "title")]] <- new_title
+  
+
+
+```
+
+
+
+### Analise dos Paises
+
+
+#### Paises por esporte
+
+```{r Analise Paises por Esporte}
+
+#Gerando imagens esportes vs gênero
+for (i in 1:3) {
+  olympics_country <- olympics |>
+    filter(NOC == countrys[i])
+  country_title <- str_c(
+      "Summer Olympics male to famale athletes proportion from 1964 to 2016 in",
+      olympics_country$region[1],
+      sep = " "
+    )
+  
+ 
+  country_sex_per_sport <- olympics_country |>
+  filter(season == "Summer" & year >= 1948) |>
+  group_by(sport) |>
+  count(sex) |>
+  group_by(sport) |>
+  mutate(percent = 100 * n / sum(n)) |>
+  ungroup() |>
+  dplyr::select(-n) |>
+  tidyr::pivot_wider(
+    names_from = sex,
+    values_from = percent,
+    names_prefix = "percent_"
+  ) |>
+  dplyr::mutate(sport = forcats::fct_reorder(sport, desc(percent_F))) |>
+  tidyr::pivot_longer(cols = c("percent_F", "percent_M"),
+                      values_to = "percent") |>
+  dplyr::rename("sex" = name) |>
+  dplyr::mutate(
+    sex = stringr::str_remove(sex, "percent_"),
+    sex = forcats::fct_relevel(sex, c("M", "F")),
+    percent = replace_na(percent, 0)
+  ) 
+
+  
+   
+  #Gerando Lista de figuras para
+  fig <- country_sex_per_sport |>
+    ggplot(mapping = aes(percent, sport)) +
+  geom_col(aes(fill = sex, color = sex), position = "stack") +
+  scale_color_manual(values = country_colors[, i], labs("")) +
+  scale_fill_manual(values = country_colors[, i], labs("")) +
+  geom_vline(xintercept = 50,
+             linetype = "dashed",
+             size = 0.7) +
+  hrbrthemes::scale_x_percent(scale = 1) +
+  hrbrthemes::theme_ipsum_pub() +
+  theme(
+    legend.title = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor  = element_blank(),
+    legend.text = element_text(size = 24),
+    axis.text.x = element_text(size = 24),
+    axis.text.y = element_text(size = 24),
+    plot.caption = element_text(size = 20),
+    plot.subtitle = element_text(size = 24, vjust = -1)
+  ) +
+  labs(
+    y = "",
+    x = "",
+    subtitle = "Participation by gender and sport",
+    caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
+  ) +
+  ggtitle("")
+
+  
+  
+  fig <- ggplotGrob(fig)
+  
+  new_title <- gtable(unit(c(0.9, 12.4, 0.9), "in"), unit(0.5, "in")) |>
+  gtable_add_grob(grobs = flags[i], t = 1, l = 1) |>
+  gtable_add_grob(textGrob(label = country_title,
+                           x = unit(0, "npc"), just = "left", gp=gpar(fontsize=24)),
+                  t = 1, l = 2) |>
+  gtable_add_grob(grobs = flags[i], t = 1, l = 3) |>
+  gtable_add_col_space(width = unit(5, "pt"))
+
+  
+  fig$grobs[[which(fig$layout$name == "title")]] <- new_title
+  
+  
+  
+  list_fig_sex_sport[[i]] <- fig
+}
+
+
+```
+
+
+
+## Agrupamento por olímpiadas
+
+A seguir a participação
+
+
+```{r FIgura Geral por ano, fig.width = 12, fig.height = 8, fig.fullwidth = TRUE}
+
+grid.draw(fig_olympic_year)
+
+```
+
+
+
+```{r FIgura Geral  por esportes, fig.width = 18, fig.height = 14, fig.fullwidth = TRUE}
+
+
+grid.draw(fig_olympic_sport)
+
+
+```
+
+
+
+```{r Figura Geral por medalhas, fig.width = 18, fig.height = 14, fig.fullwidth = TRUE}
+
+
+grid.draw(fig_olympic_medal_sport)
+
+
+```
+
+
+
+
+## Paises por esporte
+
+
+```{r, fig.width = 22, fig.height = 14, fig.fullwidth = TRUE}
+
+grid.draw(list_fig_sex_sport[[1]])
+
+```
+
+```{r, fig.width = 22, fig.height = 14, fig.fullwidth = TRUE}
+
+grid.draw(list_fig_sex_sport[[2]])
+
+```
+
+
+```{r, fig.width = 22, fig.height = 14, fig.fullwidth = TRUE}
+
+grid.draw(list_fig_sex_sport[[3]])
+
+```
+
+### Agrupamento por esporte praticado
+
+
+
