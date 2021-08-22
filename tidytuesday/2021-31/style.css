@@ -29,8 +29,8 @@ body {
     position: relative;
     margin-bottom: 2em;
     /* liner gradient tints the image darker for readability*/
-      background-image: linear-gradient( rgba(0,0,0,.2), rgba(0,0,0,.2) ), url(./fig/hero-image.jpg); 
-    height: 200px;
+      background-image: linear-gradient( rgba(0,0,0,.2), rgba(0,0,0,.2) ), url(fig/hero-image.jpg); 
+    height: 500px;
     background-size: cover;
     background-color: #141c25f2;
       background-position: center center;
@@ -63,11 +63,6 @@ body {
 }
 
 
-
-
-
-
-
 /*----------LOGO above TOC---------*/
 
 #TOC::before {
@@ -85,7 +80,20 @@ body {
 
 /*------------Table of Contents (TOC)----------- */
 
+/*----------TOC Sticky Fix---------*/
 
+
+.main-container > .row:first-child > div:first-child.col-xs-12.col-sm-4.col-md-3{
+  position: sticky;
+  top: 10px;
+}
+
+#TOC{ 
+  position: initial;
+  width: 100%;
+}
+
+/*----------TOC Sticky Adjustment---------*/
 
 .tocify ul, .tocify li { /* Increases spacing between TOC headers*/
     line-height: 20px !important;
@@ -94,10 +102,6 @@ body {
 .tocify ul {
   border-right: solid 1px #eee; /* Thin right border on TOC list */
 }
-
-
-
-
 
 
 
