@@ -693,7 +693,6 @@ ggsave(
 
 
 
-
 ####Filtrando por medalhas por gênero####
 
 
