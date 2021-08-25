@@ -16,4 +16,4 @@ participate.
     [kaggle](https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results).
 
 -   You can find my analisys
-    [here](https://github.com/talesgomes27/tidytuesday/blob/main/tidytuesday/2021-31/tidytuesday_2021-31.html)
+    [here](https://talesgomes27.github.io/tidytuesday/tidytuesday/2021-31/tidytuesday_2021-31.html)
