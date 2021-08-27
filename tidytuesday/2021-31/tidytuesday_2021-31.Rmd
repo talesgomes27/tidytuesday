@@ -67,31 +67,31 @@ Este trabalho foi feito a partir do [tidytuesday](https://github.com/rfordatasci
 
 A análise deste trabalho será baseada nos [passos](https://github.com/brendensong/Google-Data-Analytics-Professional-Certificate/wiki/1.3.2.Outlining-the-data-analysis-process) descritos no curso "Certificado Profissional de Análise de dados" do Google no [Corsera](https://www.coursera.org/professional-certificates/google-data-analytics), quais sejam:
 
-* Ask - Fase de perguntas
-* Prepare - Fase de preparação dos dados
-* Process - Fase de processamento dos dados
-* Analyze - Fase de análise dos dados
-* Share - Fase de visualização dos dados
-* Act - Fase de ação ou conclusão
+* Ask — Fase de perguntas
+* Prepare — Fase de preparação dos dados
+* Process — Fase de processamento dos dados
+* Analyze — Fase de análise dos dados
+* Share — Fase de visualização dos dados
+* Act — Fase de ação ou conclusão
 
 
 ## Fase de perguntas
 
 ### Objetivo
 
-Este estudo tem como objetivo investigar a participação feminina olímpica do Brasil no período de 1948 à 2016 e como essa participação difere da média olímpica e de países pares.
+Este estudo visa investigar a participação feminina olímpica do Brasil no período de 1948 a 2016 e como essa participação difere da média olímpica e de países pares.
 
 
 ### Resumo
 
-Este trabalho foi feito com base nos dados históricos olímpicos modernos (fonte:[kaggle](https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results)), tendo como objetivo realizar uma comparação do brasil com a média olimpica e os maiores medalistas americanos (Estados unidos e Canadá) em relação à participação feminina de 1948 até 2016. Canadá e Estados Unidos foram escolhidos para comparação por estarem no continente americano, possuírem tamanhos similares ao do Brasil, além do fato de terem participado de todas as edições olímpicas no período estudado. 
+Este trabalho foi feito com base nos dados históricos olímpicos modernos (fonte:[kaggle](https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results)), objetivando realizar uma comparação do Brasil com a média olímpica e os maiores medalhistas americanos (Estados Unidos e Canadá) em relação à participação feminina de 1948 até 2016. Canadá e os Estados Unidos foram escolhidos para comparação por estarem no continente americano, possuírem tamanhos similares ao do Brasil, além do fato de terem participado de todas as edições olímpicas no período estudado. 
 
 
 
 ## Fase de preparação
 
-O banco de dados deste projeto é composto por uma planilha confeccionada pelo usário [
-rgriffin](https://www.kaggle.com/heesoo37) do kagle apartir do site [sports-reference](https://www.sports-reference.com/). Os dados são compostos por duas planilhas chamadas "olympics" (com 271.116 linhas e 15 colunas) e "regions" (com 230 linhas e 3 colunas). A segiur o esquema de ambas as tabelas utilizadas nesse trabalho:
+O banco de dados deste projeto é composto por uma planilha confeccionada pelo usuário [
+rgriffin](https://www.kaggle.com/heesoo37) do kagle a partir do site [sports-reference](https://www.sports-reference.com/). Os dados são compostos por duas planilhas chamadas "*olympics*" (com 271.116 linhas e 15 colunas) e "*regions*" (com 230 linhas e 3 colunas). A seguir o esquema de ambas as tabelas utilizadas nesse trabalho:
 
 ```{r, echo=TRUE}
 
@@ -109,7 +109,7 @@ glimpse(tuesdata$regions)
 
 ## Fase de processamento
 
-Nesta fase fora investigado os dados a procura de erros e inconsistência que atrapalhem a análise. Aqui Foram identificados valores ausêntes na coluna "medal", bem como inconsistência de nominação na coluna "team". Como solução fora feita uma união das tabelas "olympics" e "regions" para que pudéssemos utilizar a coluna "region" da tabela "regions" em substituição da coluna "team" da tabela "olympics". O código utilizado nessa fase pode ser observado a seguir:
+Nesta fase fora investigado os dados a procura de erros e inconsistência que atrapalhem a análise. Aqui Foram identificados valores ausentes na coluna "*meda*l", bem como inconsistência de nominação na coluna "*team*". Como solução fora feita uma união das tabelas "*olympics*" e "*regions*" para podermos utilizar a coluna "*region*" da tabela "*regions*" em substituição da coluna "*team*" da tabela "*olympics*". O código utilizado nessa fase pode ser observado a seguir:
 
 
 ```{r Limpeza de Dados, echo=TRUE}
@@ -176,18 +176,19 @@ flags <- list(flag_canada, flag_usa, flag_brazil)
 
 ## Fases de análise e visalização
 
-Neste fase foi realizada a comparação entre a média olímpica, Canadá, EUA e Brasil levando em consieração as seguintes métricas:
+Nesta fase foi realizada a comparação entre a média olímpica, Canadá, EUA e Brasil considerando as seguintes métricas:
 
 * Participação por esporte praticado;
 * Participação por ano olímpico;
-* Qantidade de medalhas por esporte praticado;
-* Qantidade de medalhas por ano olímpico.
+* Quantidade de medalhas por esporte praticado;
+* Quantidade de medalhas por ano olímpico.
+
 
 
 
 ### Participação por esporte
 
-Neste fase há muita sobreposição entre os países e a média olimpica, com esportes como Boxe, Polo aquático, canoagem e tiro olímpico com baixa representatividade feminina, enquanto esportes como Handebol, Volêi de praia, Vôlei, Ginastica olímpica e Triatlo com uma alta representatividade feminina. Neste quesito o Brasil segue, em regra, a média olímpica e de seus pares em relação a participação feminina olímpica por esporte.
+Neste quesito há muita sobreposição entre os países e a média olímpica, com esportes como Boxe, Polo aquático, canoagem e tiro olímpico com baixa representatividade feminina, enquanto esportes como Handebol, Vôlei de praia, Vôlei, Ginastica olímpica e Triatlo com uma alta representatividade feminina. Neste quesito o Brasil segue, em regra, a média olímpica e de seus pares em relação à participação feminina olímpica por esporte.
 
 
 ```{r Anailse_geral_por_esportes}
@@ -256,7 +257,7 @@ new_title <-
   gtable_add_grob(grobs = Olympic_rings, t = 1, l = 1) |>
   gtable_add_grob(
     textGrob(
-      label = "Participação olímpica feminina média de 1948 à 2016",
+      label = "Participação olímpica feminina média de 1948 a 2016",
       x = unit(0, "npc"),
       just = "left",
       gp = gpar(fontsize = 44)
@@ -284,7 +285,7 @@ for (i in 1:3) {
   olympics_country <- olympics |>
     filter(NOC == countrys[i])
   country_title <- str_c(
-    "Participação olímpica feminina de 1964 à 2016 no",
+    "Participação olímpica feminina de 1948 a 2016 no",
     countrys_names[i],
     sep = " "
   )
@@ -408,7 +409,8 @@ grid.draw(list_fig_sex_sport[[3]])
 
 ### Medalhas por esporte
 
-Nesta métrica pode-se observar uma relação direta entre a participação feminina e a quantidade de medalhas proporcionais por gênero detre todos os países e a média olímpica. Quanto maior a participação feminina, maior a quantidade de medalhas. Contudo, no caso brasileiro essa relação não abrange todo o escopo olpimpico, pode-se observar que em esportes como  ginastica olímpica e natação, essa relação entre representatividade e quantidae de medalhas não se faz verdadeira. Isto pode se dar devido a diversos fatores que vão desde a tradição de cada esporte no país, até diferenças salariais, de patrocinio e condições de trabalho em gerais, que fogem ao escopo deste trabalho e necessitam de dados adicionais. 
+Aqui pôde-se observar uma relação direta entre a participação feminina e a quantidade de medalhas proporcionais por gênero dentre todos os países e a média olímpica. Quanto maior a participação feminina, maior a quantidade de medalhas. Contudo, no caso brasileiro essa relação não abrange todo o escopo olímpico, observo-se que em esportes como  ginastica olímpica e natação, por exemplo, essa relação entre representatividade e quantidade de medalhas não se fez verdadeira. Isto pode se dar devido a diversos fatores que vão desde a tradição de cada esporte no país, até diferenças salariais, de patrocínio e condições de trabalho em gerais, que fogem ao escopo deste trabalho e necessitam de dados adicionais. 
+
 
 
 ```{r Analise_geral_por_medalhas}
@@ -488,7 +490,7 @@ new_title <-
   gtable_add_grob(grobs = Olympic_rings, t = 1, l = 1) |>
   gtable_add_grob(
     textGrob(
-      label = "Participação olímpica feminina média de 1948 à 2016",
+      label = "Participação olímpica feminina média de 1948 a 2016",
       x = unit(0, "npc"),
       just = "left",
       gp = gpar(fontsize = 44)
@@ -515,7 +517,7 @@ for (i in 1:3) {
   olympics_country <- olympics |>
     filter(NOC == countrys[i])
   country_title <- str_c(
-    "Participação olímpica feminina de 1964 à 2016 no",
+    "Participação olímpica feminina de 1948 a 2016 no",
     countrys_names[i],
     sep = " "
   )
@@ -657,7 +659,8 @@ grid.draw(list_fig_medal_sport[[3]])
 ### Participação por ano
 
 
-Nesta métrica também há uma relação direta com o tempo e a participação feminina nas olímpiadas. Com o passar do tempo a quandidade de mulheres participando nas olpimpiadas cresceu, indo de média de 20% no ano de 1948 até mais de 45% no ano de 2016. No caso especifico do Brasil ocorreram algumas diferenças pontuais, como por exemplo a participação feminina diminuiu consideravelmente dos anos de 1948 até o ano de 1964, tendo conseguido votar ao patamar de 1948 somente no ano de 1988, esta diminuição pode ter se dado por fatores internos como a [Republica populista](https://brasilescola.uol.com.br/historiab/republica-populista-1945-1964.htm) (1945 à 1964) e a [ditadura militar](https://brasilescola.uol.com.br/historiab/ditadura-militar.htm) (1964 à 1985), contudo para realizar tal afirmação são necessários dados adionais. Ocorreu também, no caso brasileiro uma diminuição, não tão expressiva quanto a anterior, da participação feminina dos anos de 2008 à 2016, que podem também necessita de dados adicionais para ser analisada.  
+Nesta métrica também há uma relação direta com o tempo e a participação feminina nas olimpíadas. Com o passar do tempo a quantidade de mulheres participando nas olimpíadas cresceu, indo de média de 20% no ano de 1948 até mais de 45% no ano de 2016. No caso específico do Brasil ocorreram algumas diferenças pontuais, como, por exemplo, a participação feminina diminuiu consideravelmente dos anos de 1948 até o ano de 1964, tendo conseguido votar ao patamar de 1948 somente no ano de 1988, esta diminuição pode ter se dado por fatores internos como a [República populista](https://brasilescola.uol.com.br/historiab/republica-populista-1945-1964.htm) (1945 à 1964) e a [ditadura militar](https://brasilescola.uol.com.br/historiab/ditadura-militar.htm) (1964 à 1985), contudo para realizar tal afirmação são necessários dados adicionais. Ocorreu também, no caso brasileiro uma diminuição, não tão expressiva quanto a anterior, da participação feminina dos anos de 2008 a 2016, que podem também necessita de dados adicionais para ser analisada.  
+
 
 ```{r Analise_media_por_ano}
 
@@ -705,7 +708,7 @@ new_title <- gtable(unit(c(1, 15, 1), "in"), unit(0.9, "in")) |>
   gtable_add_grob(grobs = Olympic_rings, t = 1, l = 1) |>
   gtable_add_grob(
     textGrob(
-      label = "Participação olímpica feminina média de 1948 à 2016",
+      label = "Participação olímpica feminina média de 1948 a 2016",
       x = unit(0, "npc"),
       just = "left",
       gp = gpar(fontsize = 45)
@@ -731,7 +734,7 @@ for (i in 1:3) {
   olympics_country <- olympics |>
     filter(NOC == countrys[i])
   country_title <- str_c(
-    "Participação olímpica feminina de 1964 à 2016 no",
+    "Participação olímpica feminina de 1948 a 2016 no",
     countrys_names[i],
     sep = " "
   )
@@ -840,7 +843,7 @@ grid.draw(list_fig_sex_year[[3]])
 
 ### Medalhas por ano
 
-Neste quesito, em geral há uma relação direta com o tempo e a quantidade de medalhas femininas, a média olímpica vai de mais ou menos 20% no ano de 1948 à mais de 45% no ano de 2016. Canadá e estados Unidos seguem esta tendencia mundial, contudo o caso brasileiro é diferente. No brasil do ano de 1948 à 1992 o amento da participação feminina não se converteu em medalhas, tendo a primeira medalha feminina em olimpiadas se dado no de 1996, sendo que a partir desse ano a proporção de mulheres participantes e de medalhas não tem uma relação clara, com excessão dos anos de 2008 à 2016 onde houve uma diminuição do número de medalhas femininas, junto com a diminuição da participação feminina. 
+Neste quesito, em geral, há uma relação direta com o tempo e a quantidade de medalhas femininas, a média olímpica vai de cerca de 20% no ano de 1948 à mais de 45% no ano de 2016. Canadá e os Estados Unidos seguem esta tendencia mundial, contudo o caso brasileiro é diferente. No Brasil do ano de 1948 a 1992 o aumento da participação feminina não se converteu em medalhas, tendo a primeira medalha feminina em olimpíadas acontecido no ano de 1996, sendo que a partir desse ano a proporção de mulheres participantes e de medalhas não tem uma relação clara, com exceção dos anos de 2008 a 2016 onde houve uma diminuição de medalhas femininas, acompanhando a diminuição da participação feminina. 
 
 
 ```{r Analise_geral_medalha_por_ano}
@@ -905,7 +908,7 @@ new_title <- gtable(unit(c(1, 13.2, 1), "in"), unit(0.9, "in")) |>
   gtable_add_grob(grobs = Olympic_rings, t = 1, l = 1) |>
   gtable_add_grob(
     textGrob(
-      label = "Total de medalhas por gênero de 1948 à 2016",
+      label = "Total de medalhas por gênero de 1948 a 2016",
       x = unit(0, "npc"),
       just = "left",
       gp = gpar(fontsize = 46)
@@ -930,7 +933,7 @@ for (i in 1:3) {
   olympics_country <- olympics |>
     filter(NOC == countrys[i])
   
-  country_title <- str_c("Total de medalhas por gênero de 1948 à 2016 no",
+  country_title <- str_c("Total de medalhas por gênero de 1948 a 2016 no",
                          countrys_names[i],
                          sep = " ")
   
@@ -1055,5 +1058,6 @@ grid.draw(list_fig_medal_year[[3]])
 
 ## Conclusão
 
-Neste trabalho foi feita a analise da participação feminina durante no periodo de 1948 à 2016, observando tando a média mundial, quando países como Canadá, EUA e Brasil. Pôde-se observar, na média, uma relação positiva do tempo com a participação feminina, bem como no número de medalhas proporcionais. Contudo no caso brasileiro houveram algumas diferenças. No periodo de 1948 à 1984 houve, em geral uma diminuição da participação feminina no Brasil, tendo retornado aos patamares anteriores somente no ano de 1988. Da mesma maneira o aumento da participação feminina ocorrido do ano de 1948 à 2016 no Brasil não foi convertido em número de medalhas proporcionais, tendo o Brasil ganho sua primeira medalha somente no ano de 1996. Estas diferenças podem se dar por fatores internos (República Populista e Ditadura Militar), além de fatores de desigualdade de gênero como falta de patrocinio, baixos salarios e falta de incetivo à delegação feminina. Contudo, para que possamos  realizar tais afirmações se faz necessário mais dados para ancorar tais suposições aos fatos, o que foge ao escopo deste trabalho.  
+Neste trabalho foi feita a análise da participação feminina durante no período de 1948 a 2016, observando tando a média mundial, quando países como Canadá, Estados Unidos e o Brasil. Pôde-se observar, na média, uma relação positiva do tempo com a participação feminina, bem como no número de medalhas proporcionais. Contudo, no caso brasileiro houveram algumas diferenças. No período de 1948 a 1984 houve, em geral, uma diminuição da participação feminina no Brasil, tendo retornado aos patamares anteriores somente no ano de 1988. Da mesma maneira o aumento da participação feminina ocorrido do ano de 1948 a 2016 no Brasil não foi convertido em número de medalhas proporcionais, tendo o Brasil ganho sua primeira medalha somente no ano de 1996. Estas diferenças podem se dar por fatores internos (República Populista e Ditadura Militar), além de fatores de desigualdade de gênero como falta de patrocínio, baixos salários e falta de incetivo à delegação feminina. Contudo, para podermos  realizar tais afirmações se faz necessário mais dados para ancorar tais suposições aos fatos, o que foge ao escopo deste trabalho.
+ 
 
