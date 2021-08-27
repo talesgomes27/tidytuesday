@@ -1,7 +1,7 @@
 ---
 title: "Estudo sobre a participação olímpica feminina no Brasil"
 author: "Tales Gomes"
-date: "22/08/2021"
+date: "27/08/2021"
 output: 
   html_document:
     theme: flatly  
@@ -22,7 +22,6 @@ knitr::opts_chunk$set(echo = FALSE,
                       message = FALSE,
                       fig.path = "fig/code_output/",
                       error = FALSE)
-
 
 ```
 
