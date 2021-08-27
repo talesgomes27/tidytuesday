@@ -10,11 +10,12 @@
  /*------------- Apply Font to Whole Document---------------- */
  
  
- @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@500&display=swap');
 
 body {
-    font-family: 'Source Sans Pro';
-    font-size: 19px;
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    text-align: justify;
 }
 
 
@@ -91,6 +92,7 @@ body {
 #TOC{ 
   position: initial;
   width: 100%;
+  font-size: 16px;
 }
 
 /*----------TOC Sticky Adjustment---------*/
@@ -112,6 +114,8 @@ body {
   color: #050404;
   background-color: #FFBF00;
   border-color: #ccc;
+  font-size: 16px;
+  text-align: left;
 }
 
 /* Hovered TOC links*/
@@ -120,6 +124,8 @@ body {
   color: #050404;
   background-color: #35B2C9;
   border: none;
+  font-size: 16px;
+  text-align: left;
 }
 
 

@@ -22,6 +22,8 @@ knitr::opts_chunk$set(echo = FALSE,
                       message = FALSE,
                       fig.path = "fig/code_output/",
                       error = FALSE)
+
+
 ```
 
 
@@ -138,10 +140,10 @@ olympics <- olympics |>
 
 #Paises na análise
 countrys <- c("CAN", "USA", "BRA")
-countrys_names <- c("Canadá", "USA", "Brasil")
+countrys_names <- c("Canadá", "EUA", "Brasil")
 #Cores das bandeiras dos paises
 country_colors <- cbind(
-  c("M" = "#FFFAFA", "F" = "#FF0000"),
+  c("M" = "#FDEDEC", "F" = "#FF0000"),
   c("M" = "#3C3B6E", "F" = "#B22234"),
   c("M" = "#FFDF00", "F" = "#009C3B")
 )
@@ -169,6 +171,7 @@ flags <- list(flag_canada, flag_usa, flag_brazil)
 
 
 ```
+
 
 
 ## Fases de análise e visalização
@@ -240,8 +243,8 @@ fig_olympic_sport <- sex_per_sport |>
   labs(
     y = "",
     x = "",
-    subtitle = "Participation by gender and sport",
-    caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
+    subtitle = "Participação por gênero e esporte",
+    caption = "@talesgomes2709 | #tidytuesday | fonte: kaggle"
   ) +
   ggtitle("")
 
@@ -249,20 +252,20 @@ fig_olympic_sport <- sex_per_sport |>
 fig_olympic_sport <- ggplotGrob(fig_olympic_sport)
 
 new_title <-
-  gtable(unit(c(0.9, 9.3, 0.9), "in"), unit(0.9, "in")) |>
+  gtable(unit(c(0.9, 14.7, 0.9), "in"), unit(0.9, "in")) |>
   gtable_add_grob(grobs = Olympic_rings, t = 1, l = 1) |>
   gtable_add_grob(
     textGrob(
-      label = "Total olympic participation from 1948 to 2017",
+      label = "Participação olímpica feminina média de 1948 à 2016",
       x = unit(0, "npc"),
       just = "left",
-      gp = gpar(fontsize = 34)
+      gp = gpar(fontsize = 44)
     ),
     t = 1,
     l = 2
   ) |>
-  gtable_add_grob(grobs = Olympic_rings, t = 1, l = 3) |>
-  gtable_add_col_space(width = unit(5, "pt"))
+  gtable_add_grob(grobs = Olympic_rings, t = 1, l = 3)
+  #gtable_add_col_space(width = unit(5, "pt"))
 
 fig_olympic_sport$grobs[[which(fig_olympic_sport$layout$name == "title")]] <- new_title
 
@@ -281,8 +284,8 @@ for (i in 1:3) {
   olympics_country <- olympics |>
     filter(NOC == countrys[i])
   country_title <- str_c(
-    "Summer Olympics male to famale athletes proportion from 1964 to 2016 in",
-    countrys_names[1],
+    "Participação olímpica feminina de 1964 à 2016 no",
+    countrys_names[i],
     sep = " "
   )
   
@@ -336,8 +339,8 @@ for (i in 1:3) {
     labs(
       y = "",
       x = "",
-      subtitle = "Participation by gender and sport",
-      caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
+      subtitle = "Participação por gênero e esporte",
+      caption = "@talesgomes2709 | #tidytuesday | fonte: kaggle"
     ) +
     ggtitle("")
   
@@ -346,20 +349,20 @@ for (i in 1:3) {
   fig <- ggplotGrob(fig)
   
   new_title <-
-    gtable(unit(c(0.9, 12.4, 0.9), "in"), unit(0.5, "in")) |>
+    gtable(unit(c(0.9, 15.2, 0.9), "in"), unit(0.5, "in")) |>
     gtable_add_grob(grobs = flags[i], t = 1, l = 1) |>
     gtable_add_grob(
       textGrob(
         label = country_title,
         x = unit(0, "npc"),
         just = "left",
-        gp = gpar(fontsize = 24)
+        gp = gpar(fontsize = 42)
       ),
       t = 1,
       l = 2
     ) |>
-    gtable_add_grob(grobs = flags[i], t = 1, l = 3) |>
-    gtable_add_col_space(width = unit(5, "pt"))
+    gtable_add_grob(grobs = flags[i], t = 1, l = 3)
+    #gtable_add_col_space(width = unit(5, "pt"))
   
   
   fig$grobs[[which(fig$layout$name == "title")]] <- new_title
@@ -373,7 +376,7 @@ for (i in 1:3) {
 
 
 
-```{r Figura_media_participacao_por_esportes, fig.width = 18, fig.height = 14, fig.fullwidth = TRUE}
+```{r Figura_media_participacao_por_esportes, fig.width = 22, fig.height = 14, fig.fullwidth = TRUE}
 
 
 grid.draw(fig_olympic_sport)
@@ -473,7 +476,7 @@ fig_olympic_medal_sport <- medal_per_sex_sport |>
     y = "",
     x = "",
     subtitle = "Quantity of medal per gender and sport",
-    caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
+    caption = "@talesgomes2709 | #tidytuesday | fonte: kaggle"
   ) +
   ggtitle("")
 
@@ -481,20 +484,20 @@ fig_olympic_medal_sport <- medal_per_sex_sport |>
 fig_olympic_medal_sport <- ggplotGrob(fig_olympic_medal_sport)
 
 new_title <-
-  gtable(unit(c(0.9, 9.3, 0.9), "in"), unit(0.9, "in")) |>
+  gtable(unit(c(0.9, 14.7, 0.9), "in"), unit(0.9, "in")) |>
   gtable_add_grob(grobs = Olympic_rings, t = 1, l = 1) |>
   gtable_add_grob(
     textGrob(
-      label = "Total olympic participation from 1948 to 2017",
+      label = "Participação olímpica feminina média de 1948 à 2016",
       x = unit(0, "npc"),
       just = "left",
-      gp = gpar(fontsize = 34)
+      gp = gpar(fontsize = 44)
     ),
     t = 1,
     l = 2
   ) |>
-  gtable_add_grob(grobs = Olympic_rings, t = 1, l = 3) |>
-  gtable_add_col_space(width = unit(5, "pt"))
+  gtable_add_grob(grobs = Olympic_rings, t = 1, l = 3)
+  #gtable_add_col_space(width = unit(5, "pt"))
 
 fig_olympic_medal_sport$grobs[[which(fig_olympic_medal_sport$layout$name == "title")]] <- new_title
 
@@ -512,8 +515,8 @@ for (i in 1:3) {
   olympics_country <- olympics |>
     filter(NOC == countrys[i])
   country_title <- str_c(
-    "Summer Olympics male to famale athletes proportion from 1964 to 2016 in",
-    countrys_names[1],
+    "Participação olímpica feminina de 1964 à 2016 no",
+    countrys_names[i],
     sep = " "
   )
   
@@ -580,7 +583,7 @@ for (i in 1:3) {
       y = "",
       x = "",
       subtitle = "Quantity of medal per gender and sport",
-      caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
+      caption = "@talesgomes2709 | #tidytuesday | fonte: kaggle"
     ) +
     ggtitle("")
   
@@ -589,20 +592,20 @@ for (i in 1:3) {
   fig <- ggplotGrob(fig)
   
   new_title <-
-    gtable(unit(c(0.9, 12.4, 0.9), "in"), unit(0.5, "in")) |>
+    gtable(unit(c(0.9, 15.2, 0.9), "in"), unit(0.5, "in")) |>
     gtable_add_grob(grobs = flags[i], t = 1, l = 1) |>
     gtable_add_grob(
       textGrob(
         label = country_title,
         x = unit(0, "npc"),
         just = "left",
-        gp = gpar(fontsize = 24)
+        gp = gpar(fontsize = 42)
       ),
       t = 1,
       l = 2
     ) |>
-    gtable_add_grob(grobs = flags[i], t = 1, l = 3) |>
-    gtable_add_col_space(width = unit(5, "pt"))
+    gtable_add_grob(grobs = flags[i], t = 1, l = 3)
+    #gtable_add_col_space(width = unit(5, "pt"))
   
   
   fig$grobs[[which(fig$layout$name == "title")]] <- new_title
@@ -617,7 +620,7 @@ for (i in 1:3) {
 
 
 
-```{r Figura_Media_medalhas_por_esporte, fig.width = 18, fig.height = 14, fig.fullwidth = TRUE}
+```{r Figura_Media_medalhas_por_esporte, fig.width = 22, fig.height = 14, fig.fullwidth = TRUE}
 
 
 grid.draw(fig_olympic_medal_sport)
@@ -691,27 +694,27 @@ fig_olympic_year <- sex_per_year |>
   labs(
     y = "",
     x = "",
-    subtitle = "Participation by gender and year",
-    caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
+    subtitle = "Participação por gênero e ano",
+    caption = "@talesgomes2709 | #tidytuesday | fonte: kaggle"
   ) +
   ggtitle("")
 
 fig_olympic_year <- ggplotGrob(fig_olympic_year)
 
-new_title <- gtable(unit(c(1, 13, 1), "in"), unit(0.9, "in")) |>
+new_title <- gtable(unit(c(1, 15, 1), "in"), unit(0.9, "in")) |>
   gtable_add_grob(grobs = Olympic_rings, t = 1, l = 1) |>
   gtable_add_grob(
     textGrob(
-      label = "Total olympic participation from 1948 to 2017",
+      label = "Participação olímpica feminina média de 1948 à 2016",
       x = unit(0, "npc"),
       just = "left",
-      gp = gpar(fontsize = 47)
+      gp = gpar(fontsize = 45)
     ),
     t = 1,
     l = 2
   ) |>
-  gtable_add_grob(grobs = Olympic_rings, t = 1, l = 3) |>
-  gtable_add_col_space(width = unit(5, "pt"))
+  gtable_add_grob(grobs = Olympic_rings, t = 1, l = 3)
+  #gtable_add_col_space(width = unit(5, "pt"))
 
 fig_olympic_year$grobs[[which(fig_olympic_year$layout$name == "title")]] <- new_title
 
@@ -728,8 +731,8 @@ for (i in 1:3) {
   olympics_country <- olympics |>
     filter(NOC == countrys[i])
   country_title <- str_c(
-    "Summer Olympics male to famale athletes proportion from 1964 to 2016 in",
-    countrys_names[1],
+    "Participação olímpica feminina de 1964 à 2016 no",
+    countrys_names[i],
     sep = " "
   )
   
@@ -768,8 +771,8 @@ for (i in 1:3) {
     labs(
       y = "",
       x = "",
-      subtitle = "Participation by gender and year",
-      caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
+      subtitle = "Participação por gênero e ano",
+      caption = "@talesgomes2709 | #tidytuesday | fonte: kaggle"
     ) +
     ggtitle("")
   
@@ -778,20 +781,20 @@ for (i in 1:3) {
   fig <- ggplotGrob(fig)
   
   new_title <-
-    gtable(unit(c(0.9, 12.4, 0.9), "in"), unit(0.5, "in")) |>
+    gtable(unit(c(0.9, 15.05, 0.9), "in"), unit(0.5, "in")) |>
     gtable_add_grob(grobs = flags[i], t = 1, l = 1) |>
     gtable_add_grob(
       textGrob(
         label = country_title,
         x = unit(0, "npc"),
         just = "left",
-        gp = gpar(fontsize = 24)
+        gp = gpar(fontsize = 42)
       ),
       t = 1,
       l = 2
     ) |>
-    gtable_add_grob(grobs = flags[i], t = 1, l = 3) |>
-    gtable_add_col_space(width = unit(5, "pt"))
+    gtable_add_grob(grobs = flags[i], t = 1, l = 3)
+    #gtable_add_col_space(width = unit(5, "pt"))
   
   
   fig$grobs[[which(fig$layout$name == "title")]] <- new_title
@@ -806,7 +809,7 @@ for (i in 1:3) {
 
 
 
-```{r FIgura_participacao_media_por_ano, fig.width = 18, fig.height = 14, fig.fullwidth = TRUE}
+```{r FIgura_participacao_media_por_ano, fig.width = 20, fig.height = 14, fig.fullwidth = TRUE}
 
 grid.draw(fig_olympic_year)
 
@@ -814,21 +817,21 @@ grid.draw(fig_olympic_year)
 
 
 
-```{r Fígura_participacao_Canada_por_ano, fig.width = 22, fig.height = 14, fig.fullwidth = TRUE}
+```{r Fígura_participacao_Canada_por_ano, fig.width = 20, fig.height = 14, fig.fullwidth = TRUE}
 
 grid.draw(list_fig_sex_year[[1]])
 
 ```
 
 
-```{r Figura_participacao_EUA_por_ano, fig.width = 22, fig.height = 14, fig.fullwidth = TRUE}
+```{r Figura_participacao_EUA_por_ano, fig.width = 20, fig.height = 14, fig.fullwidth = TRUE}
 
 grid.draw(list_fig_sex_year[[2]])
 
 ```
 
 
-```{r Figura_participacao_Brasil_por_ano, fig.width = 22, fig.height = 14, fig.fullwidth = TRUE}
+```{r Figura_participacao_Brasil_por_ano, fig.width = 20, fig.height = 14, fig.fullwidth = TRUE}
 
 grid.draw(list_fig_sex_year[[3]])
 
@@ -891,27 +894,27 @@ fig_olympic_medal_year <- medal_per_year |>
   labs(
     y = "",
     x = "",
-    subtitle = "Medals by gender and year",
-    caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
+    subtitle = "Medalhas por gênero e ano",
+    caption = "@talesgomes2709 | #tidytuesday | fonte: kaggle"
   ) +
   ggtitle("")
 
 fig_olympic_medal_year <- ggplotGrob(fig_olympic_medal_year)
 
-new_title <- gtable(unit(c(1, 13, 1), "in"), unit(0.9, "in")) |>
+new_title <- gtable(unit(c(1, 13.2, 1), "in"), unit(0.9, "in")) |>
   gtable_add_grob(grobs = Olympic_rings, t = 1, l = 1) |>
   gtable_add_grob(
     textGrob(
-      label = "Total olympic medals per gender from 1948 to 2017",
+      label = "Total de medalhas por gênero de 1948 à 2016",
       x = unit(0, "npc"),
       just = "left",
-      gp = gpar(fontsize = 41)
+      gp = gpar(fontsize = 46)
     ),
     t = 1,
     l = 2
     ) |>
-  gtable_add_grob(grobs = Olympic_rings, t = 1, l = 3) |>
-  gtable_add_col_space(width = unit(5, "pt"))
+  gtable_add_grob(grobs = Olympic_rings, t = 1, l = 3)
+  #gtable_add_col_space(width = unit(5, "pt"))
 
 fig_olympic_medal_year$grobs[[which(fig_olympic_medal_year$layout$name == "title")]] <- new_title
 
@@ -927,8 +930,8 @@ for (i in 1:3) {
   olympics_country <- olympics |>
     filter(NOC == countrys[i])
   
-  country_title <- str_c("Total olympic medals per gender from 1948 to 2017 in",
-                         countrys_names[1],
+  country_title <- str_c("Total de medalhas por gênero de 1948 à 2016 no",
+                         countrys_names[i],
                          sep = " ")
   
   
@@ -980,8 +983,8 @@ for (i in 1:3) {
     labs(
       y = "",
       x = "",
-      subtitle = "Medals by gender and year",
-      caption = "@talesgomes2709 | #tidytuesday | source: kaggle"
+      subtitle = "Medalhas por gênero e ano",
+      caption = "@talesgomes2709 | #tidytuesday | fonte: kaggle"
     ) +
     ggtitle("")
   
@@ -990,20 +993,20 @@ for (i in 1:3) {
   fig <- ggplotGrob(fig)
   
   new_title <-
-    gtable(unit(c(0.9, 12.4, 0.9), "in"), unit(0.5, "in")) |>
+    gtable(unit(c(0.9, 15.3, 0.9), "in"), unit(0.5, "in")) |>
     gtable_add_grob(grobs = flags[i], t = 1, l = 1) |>
     gtable_add_grob(
       textGrob(
         label = country_title,
         x = unit(0, "npc"),
         just = "left",
-        gp = gpar(fontsize = 24)
+        gp = gpar(fontsize = 43)
       ),
       t = 1,
       l = 2
     ) |>
-    gtable_add_grob(grobs = flags[i], t = 1, l = 3) |>
-    gtable_add_col_space(width = unit(5, "pt"))
+    gtable_add_grob(grobs = flags[i], t = 1, l = 3) 
+    #gtable_add_col_space(width = unit(5, "pt"))
   
   
   fig$grobs[[which(fig$layout$name == "title")]] <- new_title
@@ -1024,7 +1027,7 @@ grid.draw(fig_olympic_medal_year)
 ```
 
 
-```{r Figura_Canada_medalhas_por_ano, fig.width = 22, fig.height = 14, fig.fullwidth = TRUE}
+```{r Figura_Canada_medalhas_por_ano, fig.width = 20, fig.height = 14, fig.fullwidth = TRUE}
 
 grid.draw(list_fig_medal_year[[1]])
 
@@ -1032,7 +1035,7 @@ grid.draw(list_fig_medal_year[[1]])
 
 
 
-```{r Figura_EUA_medalhas_por_ano, fig.width = 22, fig.height = 14, fig.fullwidth = TRUE}
+```{r Figura_EUA_medalhas_por_ano, fig.width = 20, fig.height = 14, fig.fullwidth = TRUE}
 
 grid.draw(list_fig_medal_year[[2]])
 
@@ -1040,7 +1043,7 @@ grid.draw(list_fig_medal_year[[2]])
 
 
 
-```{r Figura_Brasil_medalhas_por_ano, fig.width = 22, fig.height = 14, fig.fullwidth = TRUE}
+```{r Figura_Brasil_medalhas_por_ano, fig.width = 20, fig.height = 14, fig.fullwidth = TRUE}
 
 grid.draw(list_fig_medal_year[[3]])
 
