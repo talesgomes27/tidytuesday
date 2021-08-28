@@ -197,11 +197,8 @@ Neste quesito há muita sobreposição entre os países e a média olímpica, co
 #Filtrando os dados por ano olímpico
 sex_per_sport <- olympics |>
   filter(season == "Summer" & year >= 1948) |>
-  group_by(sport) |>
-  count(sex) |>
-  group_by(sport) |>
-  mutate(percent = 100 * n / sum(n)) |>
-  ungroup() |>
+  with_groups(sport, count, sex) |> 
+  with_groups(sport, mutate, percent = 100 * n / sum(n)) |> 
   dplyr::select(-n) |>
   tidyr::pivot_wider(names_from = sex,
                      values_from = percent,
@@ -292,11 +289,8 @@ for (i in 1:3) {
   
   country_sex_per_sport <- olympics_country |>
     filter(season == "Summer" & year >= 1948) |>
-    group_by(sport) |>
-    count(sex) |>
-    group_by(sport) |>
-    mutate(percent = 100 * n / sum(n)) |>
-    ungroup() |>
+    with_groups(sport, count, sex) |> 
+    with_groups(sport, mutate, percent = 100 * n / sum(n)) |> 
     dplyr::select(-n) |>
     tidyr::pivot_wider(
       names_from = sex,
@@ -419,8 +413,12 @@ Nas vsalizações dispostas abaixo, observou-se uma relação direta entre a par
 #Filtrando por Medalhas e esporte
 medal_per_sex_sport <- olympics |>
   filter(season == "Summer" & medal != "None" & year >= 1948) |>
-  with_groups(c(sport, sex, event), count, sex) |>
-  with_groups(sport, mutate, percent = 100 * n / sum(n)) |>
+  with_groups(c(sport, sex, event),
+              count,
+              sex) |>
+  with_groups(sport,
+              mutate,
+              percent = 100 * n / sum(n)) |>
   select(-n) |>
   pivot_wider(names_from = sex,
               values_from = percent,
@@ -524,8 +522,12 @@ for (i in 1:3) {
   
   country_medal_per_sport <- olympics_country |>
     filter(season == "Summer" & medal != "None" & year >= 1948) |>
-    with_groups(c(sport, sex, event), count, sex) |>
-    with_groups(sport, mutate, percent = 100 * n / sum(n)) |>
+    with_groups(c(sport, sex, event),
+                count,
+                sex) |>
+    with_groups(sport,
+                mutate,
+                percent = 100 * n / sum(n)) |>
     select(-n) |>
     pivot_wider(
       names_from = sex,
