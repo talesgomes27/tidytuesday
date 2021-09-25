@@ -36,8 +36,10 @@ olympics <- olympics |>
     year = factor(year, ordered = TRUE),
     id = factor(id),
     NOC = factor(NOC)
-  ) |> 
+  ) |>
   select(-c(notes, age, height, weight, team))
+
+
 
 
 ####Variaveis auxiliares####
